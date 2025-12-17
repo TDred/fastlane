@@ -51,6 +51,13 @@ module Scan
           # Instead, it just prints "Failing tests:"
           # followed by a list of tests that failed.
           return
+          # in Xcode 26 output format for results have changed
+          # now it doesn't print failed tests list
+          # we don't want to raise an exception here
+          # as we handle this in runner.rb at a later point
+          # otherwise `scan` job fails with generic error (line 62)
+        when /TEST EXECUTE FAILED/, /TEST FAILED/
+          return
         end
         UI.build_failure!("Error building/testing the application. #{details}")
       end
